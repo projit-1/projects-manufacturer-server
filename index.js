@@ -19,13 +19,27 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db('motors').collection('products');
+        const orderCollection = client.db('motors').collection('orders');
 
         app.get('/product', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
-        })
+        });
+
+        // app.get('/available', async(req, res) = {
+        //     const available = req.query.option || ""
+        // })
+
+
+
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        });
+
     }
     finally {
 
