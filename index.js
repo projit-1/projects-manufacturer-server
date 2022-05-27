@@ -32,6 +32,12 @@ async function run() {
         //     const available = req.query.option || ""
         // })
 
+        app.get('/order', async (req, res) => {
+            const buyer = req.query.buyer;
+            const query = { buyer: buyer };
+            const orders = await orderCollection.find(query).toArray();
+            return res.send(orders);
+        });
 
 
         app.post('/order', async (req, res) => {
