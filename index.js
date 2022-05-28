@@ -20,6 +20,7 @@ async function run() {
         await client.connect();
         const productCollection = client.db('motors').collection('products');
         const orderCollection = client.db('motors').collection('orders');
+        const userCollection = client.db('motors').collection('users');
 
         app.get('/product', async (req, res) => {
             const query = {};
@@ -27,6 +28,18 @@ async function run() {
             const products = await cursor.toArray();
             res.send(products);
         });
+
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
 
         // app.get('/available', async(req, res) = {
         //     const available = req.query.option || ""
